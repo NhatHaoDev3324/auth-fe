@@ -1,4 +1,4 @@
-# VNSFintech Authentication System (auth-fe)
+# Authentication System (auth-fe)
 
 Hệ thống xác thực mạnh mẽ và hiện đại được xây dựng bằng Next.js 16, React 19 và Tailwind CSS 4. Dự án này cung cấp một quy trình đăng ký, đăng nhập và xác thực qua Google chuẩn mực, bảo mật.
 
