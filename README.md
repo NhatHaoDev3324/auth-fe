@@ -1,45 +1,62 @@
-# Authentication System (auth-fe)
+# 🛡️ Advanced Authentication System (VNS Auth)
 
-Hệ thống xác thực mạnh mẽ và hiện đại được xây dựng bằng Next.js 16, React 19 và Tailwind CSS 4. Dự án này cung cấp một quy trình đăng ký, đăng nhập và xác thực qua Google chuẩn mực, bảo mật.
+Hệ thống xác thực toàn diện, bảo mật và hiện đại được xây dựng bằng **Next.js 15+**, **React 19** và **Tailwind CSS 4**. Dự án này không chỉ là một hệ thống đăng nhập thông thường mà còn tích hợp các hiệu ứng thị giác cao cấp và kiến trúc mã nguồn tối ưu.
 
-## 🚀 Công nghệ sử dụng
+---
 
-- **Framework**: [Next.js 16 (Turbopack)](https://nextjs.org/)
-- **Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **UI Components**: [Shadcn UI](https://ui.shadcn.com/) & [Radix UI](https://www.radix-ui.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
-- **API Client**: [Axios](https://axios-http.com/)
-- **Notifications**: [Sonner](https://sonner.stevenly.me/)
-- **Effects**: [Three.js](https://threejs.org/) (ColorBends Background)
+## ✨ Tính năng nổi bật
 
-## ✨ Tính năng chính
+- 🔐 **Xác thực đa phương thức**: 
+  - Đăng ký/Đăng nhập truyền thống qua Email & Password.
+  - Đăng nhập nhanh với **Google OAuth 2.0**.
+  - Quy trình xác thực mã **OTP** để kích hoạt tài khoản.
+- 🛣️ **Dynamic Routing Architecture**: Sử dụng cấu trúc [app/(auth)/[route]/page.tsx](cci:7://file:///d:/myProject/Auth/auth/app/%28auth%29/%5Broute%5D/page.tsx:0:0-0:0) giúp quản lý tập trung tất cả các logic (Sign-in, Sign-up, v.v.) trong một file duy nhất, giảm thiểu lặp code và dễ dàng bảo trì.
+- 🌓 **Chế độ giao diện (Theming)**: Hỗ trợ Full Dark/Light mode mượt mà với `next-themes` và icons từ `Lucide`.
+- 🎨 **Visual Excellence**:
+  - Background động **ColorBends** (Three.js/Warp effect) mang lại cảm giác premium.
+  - Hệ thống thông báo **Sonner** trực quan.
+  - Các micro-animations cho Button và Input.
+- 📦 **State Management**: Sử dụng **Zustand** với một bộ Store chuẩn hóa, quản lý thông tin người dùng tập trung và dọn dẹp dữ liệu thông minh khi Logout.
+- 🛡️ **Bảo mật & Tối ưu**:
+  - **Axios Interceptors**: Tự động đính kèm Token và xử lý logout khi token hết hạn (401).
+  - **Race Condition Protection**: Sử dụng `useRef` guards để ngăn chặn việc gọi API trùng lặp.
+  - **Standalone Output**: Sẵn sàng cho việc triển khai Docker/Production.
 
-- [x] **Đăng nhập/Đăng ký**: Theo luồng email và mật khẩu truyền thống.
-- [x] **Google OAuth 2.0**: Tích hợp đăng nhập bằng Google với callback chuyên biệt (`/verify`).
-- [x] **Quên & Đặt lại mật khẩu**: Quy trình khôi phục tài khoản qua email.
-- [x] **Bảo mật**: Cơ chế chống gọi API trùng lặp (Strict Mode Proof) bằng `useRef` và guards.
-- [x] **Giao diện hiện đại**: Sử dụng Dark/Light mode linh hoạt với `next-themes`.
-- [x] **Hiệu ứng mượt mà**: Hình nền động sử dụng `Three.js` và các micro-animations.
+---
 
-## 📁 Cấu trúc thư mục
+## 🛠️ Công nghệ sử dụng (Tech Stack)
+
+| Thành phần | Công nghệ |
+| :--- | :--- |
+| **Frontend Framework** | Next.js 15.2 (Turbopack) |
+| **Library** | React 19 (với API [use](cci:2://file:///d:/myProject/Auth/goAuth/internal/modules/auth/service/user_service.go:28:0-30:1) mới nhất) |
+| **Styling** | Tailwind CSS 4.0 |
+| **State Management** | Zustand |
+| **UI Components** | Shadcn UI & Radix UI |
+| **API Client** | Axios (với Request/Response Interceptors) |
+| **Graphics** | Three.js & Lucide Icons |
+
+---
+
+## 📁 Cấu trúc thư mục (Project Structure)
 
 ```text
-├── @types/          # Định nghĩa kiểu dữ liệu (TypeScript)
-├── api/             # Các hàm gọi API (Axios configuration)
-├── app/             # Next.js App Router
-│   ├── (auth)/      # Route group chứa logic xác thực (Login, Signup, Verify)
-│   ├── layout.tsx   # Layout gốc
-│   └── page.tsx     # Trang chủ (Dashboard demo)
-├── components/      # Hệ thống Component
-│   ├── customs/     # Các component hiệu ứng đặc biệt (ColorBends)
-│   ├── forms/       # Các Form logic (SignIn, SignUp, ForgotPassword...)
-│   └── ui/          # Các component nguyên tử từ Shadcn UI
-├── config/          # Cấu hình hằng số, đường dẫn (Path constants)
-├── lib/             # Các utility functions, axios instance
-├── provider/        # Context Providers (Theme, Mount)
-└── store/           # Zustand stores quản lý Global State
+auth/
+├── @types/             # Định nghĩa Interface & Types (UserType, v.v.)
+├── api/                # Cấu hình API endpoints (auth.ts)
+├── app/
+│   ├── (auth)/         # Group route dành cho xác thực
+│   │   └── [route]/    # Dynamic routing cho Sign-in, Sign-up, Forgot-pass
+│   │       ├── layout.tsx  # Layout chung với hiệu ứng ColorBends
+│   │       └── page.tsx    # Logic xử lý render Form tương ứng
+│   ├── layout.tsx      # Root layout (Providers, Fonts)
+│   └── page.tsx        # Dashboard/Home page sau khi đăng nhập
+├── components/         # Chứa Forms, UI atomics và hiệu ứng Customs
+├── config/             # Hằng số cấu hình (Path constants)
+├── lib/                # Utils & Axios Instance
+├── store/              # Zustand Auth Store
+└── public/             # Assets (Logos, Images)
+
 ```
 
 ## 🛠️ Hướng dẫn cài đặt
