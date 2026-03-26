@@ -94,12 +94,11 @@ auth/
 
 Để tính năng đăng nhập Google hoạt động, bạn cần cấu hình ứng dụng trong [Google Cloud Console](https://console.cloud.google.com/):
 - **Authorized Javascript Origins**: `http://localhost:3000`
-- **Authorized redirect URIs**: `http://localhost:3000/verify`
+- **Authorized redirect URIs**: `http://localhost:3000/sign-in`
 
 ## 📝 Ghi chú phát triển
 
 - Dự án sử dụng **Next.js 16 Canary/Turbopack**, đảm bảo tốc độ hot-reload cực nhanh.
-- Luồng Google Auth được tách riêng vào route `/verify` để đảm bảo tính ổn định và tuân thủ quy trình trao đổi code-token an toàn.
 - Cache `.next` có thể được xóa nếu gặp lỗi build liên quan đến type generation của Turbopack.
 
 ---
