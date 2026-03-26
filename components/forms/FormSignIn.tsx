@@ -2,15 +2,15 @@
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { path } from "@/config/path";
-import { loginByEmail } from "@/api/auth";
+import { loginByEmail, registerByGoogle } from "@/api/auth";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface SignInError {
     email?: string;
@@ -22,9 +22,11 @@ export default function FormSignIn() {
     const [password, setPassword] = useState<string>('');
     const [showPass, setShowPass] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
     const [errors, setErrors] = useState<SignInError>({});
-
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const hasCalledApi = useRef(false);
 
     async function handleSignIn() {
         if (loading) return;
@@ -62,11 +64,11 @@ export default function FormSignIn() {
     }
 
     const handleGoogleLogin = () => {
-        if (loading) return;
+        if (loadingGoogle) return;
 
         const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
         const options = {
-            redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/verify',
+            redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/sign-in',
             client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
             access_type: 'offline',
             response_type: 'code',
@@ -79,6 +81,41 @@ export default function FormSignIn() {
         const qs = new URLSearchParams(options);
         window.location.href = `${rootUrl}?${qs.toString()}`;
     };
+
+    useEffect(() => {
+        const code = searchParams.get('code');
+
+        if (!code) return;
+
+        if (hasCalledApi.current) return;
+        hasCalledApi.current = true;
+
+        setLoadingGoogle(true);
+
+        const handleCallback = async () => {
+            try {
+                const res = await registerByGoogle(code);
+                if (res.success) {
+                    localStorage.setItem('token', res.token);
+                    toast.success("Đăng nhập bằng Google thành công!");
+                    router.push(path.HOME);
+                } else {
+                    throw new Error(res.message || "Xác thực thất bại");
+                }
+            } catch (error) {
+                let message = "Xác thực Google thất bại.";
+                if (axios.isAxiosError(error)) {
+                    message = error.response?.data?.message || message;
+                }
+                toast.error(message);
+                router.replace(path.SIGN_IN);
+            } finally {
+                setLoadingGoogle(false);
+            }
+        };
+
+        handleCallback();
+    }, [searchParams, router]);
 
     return (
         <div className={`flex flex-col gap-4 min-w-sm`}>
@@ -140,8 +177,8 @@ export default function FormSignIn() {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-2">
-                    <Button size={"lg"} className="w-full" onClick={handleSignIn} disabled={loading}>
-                        {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Đăng nhập"}
+                    <Button size={"lg"} className="w-full cursor-pointer" onClick={handleSignIn} disabled={loading}>
+                        {loading ? <><Loader2 className="animate-spin w-5 h-5" /> Đang xử lý...</> : "Đăng nhập"}
                     </Button>
 
                     <div className="flex items-center gap-x-2">
@@ -152,9 +189,9 @@ export default function FormSignIn() {
                         <div className="flex-1 h-px bg-muted-foreground" />
                     </div>
 
-                    <Button size={"lg"} variant={"secondary"} className="w-full flex flex-row gap-2" onClick={handleGoogleLogin}>
-                        <Image src={"/logo/business/google.svg"} alt={"Google Icon"} width={20} height={20} style={{ width: '20px', height: 'auto' }} />
-                        <span>Đăng nhập với Google</span>
+                    <Button disabled={loadingGoogle} size={"lg"} variant={"secondary"} className="w-full flex flex-row gap-2 cursor-pointer bg-white text-black hover:bg-white/80 hover:text-black/80" onClick={handleGoogleLogin}>
+                        {loadingGoogle ? <Loader2 className="animate-spin w-5 h-5" /> : <Image src={"/logo/business/google.svg"} alt={"Google Icon"} width={20} height={20} style={{ width: '20px', height: 'auto' }} />}
+                        <span>{loadingGoogle ? "Đang xử lý..." : "Đăng nhập với Google"}</span>
                     </Button>
 
                 </div>

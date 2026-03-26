@@ -33,3 +33,8 @@ export const verifyOtp = async (email: string, otp: string) => {
     });
     return response.data;
 };
+
+export const getProfile = async () => {
+    const response = await api.get(`/api/${version}/auth/profile`);
+    return response.data.data;
+};

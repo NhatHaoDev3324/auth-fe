@@ -1,25 +1,21 @@
-import type { Metadata } from "next";
+"use client";
+
 import "@/style/globals.css";
 import ColorBends from "@/components/customs/ColorBends";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { path } from "@/config/path";
+import { useRouter } from "next/navigation";
 
-export const metadata: Metadata = {
-    title: "Auth",
-    description: "Auth",
-};
 
-export default function AuthLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+    const router = useRouter();
+
     return (
-
         <div className={`h-screen w-screen flex flex-col antialiased overflow-hidden select-none`}>
             <main className="flex-1 overflow-auto flex relative">
 
-                <Button className="absolute top-8 left-1/2 -translate-x-1/2 md:left-8 md:translate-x-0 z-20 backdrop-blur-3xl border bg-muted/20 text-foreground hover:bg-muted/20">
+                <Button onClick={() => router.push(path.HOME)} className="absolute top-8 left-1/2 -translate-x-1/2 md:left-8 md:translate-x-0 z-20 backdrop-blur-xl border bg-muted/20 text-foreground hover:bg-muted-foreground/20">
                     <ArrowLeft />
                     Quay lại trang chủ
                 </Button>

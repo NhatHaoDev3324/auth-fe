@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     icons: {
         icon: [
             {
-                url: "/images/logo.svg",
+                url: "/logo/lightLogo.png",
                 media: "(prefers-color-scheme: light)",
             },
             {
-                url: "/images/logo.svg",
+                url: "/logo/darkLogo.png",
                 media: "(prefers-color-scheme: dark)",
             },
         ],
-        apple: "/images/logo.svg",
+        apple: "/logo/lightLogo.png",
     },
 };
 
