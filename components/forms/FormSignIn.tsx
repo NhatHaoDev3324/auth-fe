@@ -7,10 +7,12 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { path } from "@/config/path";
+import { PATH } from "@/config/path";
 import { loginByEmail, registerByGoogle } from "@/api/auth";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
+import LogoTheme from "../customs/LogoTheme";
 
 interface SignInError {
     email?: string;
@@ -24,6 +26,7 @@ export default function FormSignIn() {
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
     const [errors, setErrors] = useState<SignInError>({});
+    const { theme } = useTheme();
     const router = useRouter();
     const searchParams = useSearchParams();
     const hasCalledApi = useRef(false);
@@ -47,7 +50,7 @@ export default function FormSignIn() {
             const res = await loginByEmail(email, password);
             if (res.success) {
                 const token = res.token;
-                localStorage.setItem('token', token);
+                localStorage.setItem('accessToken', token);
 
                 toast.success("Đăng nhập thành công!");
                 router.push('/');
@@ -96,9 +99,9 @@ export default function FormSignIn() {
             try {
                 const res = await registerByGoogle(code);
                 if (res.success) {
-                    localStorage.setItem('token', res.token);
+                    localStorage.setItem('accessToken', res.token);
                     toast.success("Đăng nhập bằng Google thành công!");
-                    router.push(path.HOME);
+                    router.push(PATH.HOME);
                 } else {
                     throw new Error(res.message || "Xác thực thất bại");
                 }
@@ -108,7 +111,7 @@ export default function FormSignIn() {
                     message = error.response?.data?.message || message;
                 }
                 toast.error(message);
-                router.replace(path.SIGN_IN);
+                router.replace(PATH.SIGN_IN);
             } finally {
                 setLoadingGoogle(false);
             }
@@ -117,10 +120,13 @@ export default function FormSignIn() {
         handleCallback();
     }, [searchParams, router]);
 
+
+
+
     return (
-        <div className={`flex flex-col gap-4 min-w-sm`}>
+        <div className={`flex flex-col gap-4 min-w-xs md:min-w-sm`}>
             <div className={`flex flex-col gap-4 items-center text-center`}>
-                <Image src={`/images/logo.svg`} alt={"Logo"} width={240} height={64} style={{ width: '64px', height: 'auto' }} />
+                <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
                     Truy cập hệ thống VNSFintech để quản lý dữ liệu tài chính của bạn
                 </p>
@@ -148,7 +154,7 @@ export default function FormSignIn() {
                 <div className="grid">
                     <div className="flex items-center mb-2">
                         <Label htmlFor="password" >Mật khẩu <span className="text-red-500">*</span></Label>
-                        <Link href={path.FORGOT_PASSWORD} className="ml-auto text-sm underline-offset-2 hover:underline">
+                        <Link href={PATH.FORGOT_PASSWORD} className="ml-auto text-sm underline-offset-2 hover:underline">
                             Quên mật khẩu?
                         </Link>
                     </div>
@@ -198,7 +204,7 @@ export default function FormSignIn() {
             </div>
             <div className={`text-center text-sm `}>
                 Chưa có tài khoản?{" "}
-                <Link href={path.SIGN_UP} className="underline underline-offset-4">
+                <Link href={PATH.SIGN_UP} className="underline underline-offset-4">
                     Đăng ký
                 </Link>
             </div>

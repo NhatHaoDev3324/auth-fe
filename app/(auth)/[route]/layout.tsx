@@ -3,23 +3,27 @@
 import "@/style/globals.css";
 import ColorBends from "@/components/customs/ColorBends";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { path } from "@/config/path";
+import { ArrowLeft, Moon, Sun } from "lucide-react";
+import { PATH } from "@/config/path";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 
 export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const router = useRouter();
+    const { theme, setTheme } = useTheme();
 
     return (
         <div className={`h-screen w-screen flex flex-col antialiased overflow-hidden select-none`}>
             <main className="flex-1 overflow-auto flex relative">
 
-                <Button onClick={() => router.push(path.HOME)} className="absolute top-8 left-1/2 -translate-x-1/2 md:left-8 md:translate-x-0 z-20 backdrop-blur-xl border bg-muted/20 text-foreground hover:bg-muted-foreground/20">
+                <Button onClick={() => router.push(PATH.HOME)} variant={"outline"} className="absolute top-8 left-4 md:left-8 z-20 backdrop-blur-xl border bg-muted/20 text-foreground hover:bg-muted-foreground/20">
                     <ArrowLeft />
                     Quay lại trang chủ
                 </Button>
-
+                <Button size={"icon"} variant={"outline"} className="absolute top-8 right-6 md:right-8 rounded-full z-20 backdrop-blur-xl border bg-muted/20 text-foreground hover:bg-muted-foreground/20" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                    {theme === "dark" ? <Sun /> : <Moon />}
+                </Button>
                 <div className="w-full absolute z-10 top-0 left-0 right-0 bottom-0">
                     {children}
                 </div>

@@ -5,7 +5,7 @@ import { getProfile } from '@/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { path } from '@/config/path';
+import { PATH } from '@/config/path';
 import { Loader2, Mail, Moon, ShieldCheck, Sun } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
@@ -20,13 +20,13 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const hasFetched = useRef(false);
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
 
 
     useEffect(() => {
         if (!token) {
             logout();
-            router.replace(path.SIGN_IN);
+            router.replace(PATH.SIGN_IN);
             return;
         }
 
@@ -42,7 +42,7 @@ export default function Home() {
                 setUserName(res.full_name);
             } catch {
                 logout();
-                router.replace(path.SIGN_IN);
+                router.replace(PATH.SIGN_IN);
                 return;
             } finally {
                 setLoading(false);
@@ -54,10 +54,11 @@ export default function Home() {
 
     const handleLogout = () => {
         toast.success("Đăng xuất thành công!");
-        localStorage.removeItem("token");
-        router.replace(path.SIGN_IN);
         logout();
+        router.replace(PATH.SIGN_IN);
     };
+
+
 
     if (loading) {
         return (
@@ -72,7 +73,7 @@ export default function Home() {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-linear-to-b from-background to-muted/20 relative">
-            <Button variant={"outline"} size={"icon"} className="absolute top-6 right-8 rounded-full" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            <Button variant={"outline"} size={"icon"} className="absolute top-6 right-1/2 translate-x-1/2 md:right-8 rounded-full" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                 {theme === "dark" ? <Sun /> : <Moon />}
             </Button>
             <div className="w-full max-w-md space-y-6">
@@ -96,7 +97,7 @@ export default function Home() {
                                     alt="Avatar"
                                     width={40}
                                     height={40}
-                                    className="rounded-full"
+                                    className="rounded-full object-cover size-10"
                                 />
                             </div>
                             <div className="flex flex-col">

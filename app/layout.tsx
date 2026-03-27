@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     icons: {
         icon: [
             {
-                url: "/logo/lightLogo.png",
+                url: "/logo/logo-dark.svg",
                 media: "(prefers-color-scheme: light)",
             },
             {
-                url: "/logo/darkLogo.png",
+                url: "/logo/logo-light.svg",
                 media: "(prefers-color-scheme: dark)",
             },
         ],
-        apple: "/logo/lightLogo.png",
+        apple: "/logo/logo-dark.svg",
     },
 };
 
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 >
                     <MountProvider>
                         {children}
-                        <Toaster />
+                        <Toaster richColors />
                     </MountProvider>
                 </ThemeProvider>
             </body>

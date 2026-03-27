@@ -33,6 +33,6 @@ export const useAuthStore = create<AuthState>((set) => ({
             userName: "Không xác định",
             avatar: "/images/noAvata.png"
         });
-        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
     },
 }));

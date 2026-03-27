@@ -3,11 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { path } from "@/config/path";
+import { PATH } from "@/config/path";
+import { toast } from "sonner";
+import axios from "axios";
+import DialogVerifyOTP from "../customs/DialogVerifyOTP";
+import { registerByEmail } from "@/api/auth";
+import LogoTheme from "../customs/LogoTheme";
 
 interface SignUpError {
     firstName?: string;
@@ -32,6 +36,7 @@ export default function FormSignUp() {
         confirmPassword: false
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const [openDialogVerify, setOpenDialogVerify] = useState<boolean>(false);
 
     async function handleSignUp() {
         const newErrors: SignUpError = {};
@@ -71,22 +76,31 @@ export default function FormSignUp() {
         setLoading(true)
 
         try {
-
+            const res = await registerByEmail(firstName, lastName, email, password);
+            if (res.success) {
+                setOpenDialogVerify(true)
+            }
+        } catch (error) {
+            let message = "Đăng ký tài khoản thất bại. Vui lòng kiểm tra lại thông tin.";
+            if (axios.isAxiosError(error)) {
+                message = error.response?.data?.message || message;
+            }
+            toast.error(message);
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <div className={`flex flex-col gap-4 min-w-sm`}>
+        <div className={`flex flex-col gap-4 min-w-xs md:min-w-sm`}>
             <div className={`flex flex-col gap-4 items-center text-center`}>
-                <Image src={`/images/logo.svg`} alt={"Logo"} width={240} height={64} style={{ width: '64px', height: 'auto' }} />
+                <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
                     Truy cập hệ thống VNSFintech để quản lý dữ liệu tài chính của bạn
                 </p>
             </div>
             <div className="flex flex-col gap-2">
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                     <div className="grid">
                         <Label htmlFor="firstName" className={"mb-2"}>Họ <span className="text-red-500">*</span></Label>
                         <Input
@@ -210,10 +224,13 @@ export default function FormSignUp() {
             </div>
             <div className={`text-center text-sm `}>
                 Đã có tài khoản?{" "}
-                <Link href={path.SIGN_IN} className="underline underline-offset-4">
+                <Link href={PATH.SIGN_IN} className="underline underline-offset-4">
                     Đăng nhập
                 </Link>
             </div>
+
+            <DialogVerifyOTP openDialog={openDialogVerify} setOpenDialog={setOpenDialogVerify} email={email} resendOtp={handleSignUp} />
+
         </div>
     )
 }

@@ -5,7 +5,7 @@ import FormSignUp from '@/components/forms/FormSignUp';
 import FormForgotPassword from '@/components/forms/FormForgotPassword';
 import FormResetPassword from '@/components/forms/FormResetPassword';
 import { notFound } from 'next/navigation';
-import { path } from '@/config/path';
+import { PATH } from '@/config/path';
 
 
 interface AuthenticationClientProps {
@@ -16,10 +16,10 @@ interface AuthenticationClientProps {
 
 export default function AuthenticationClient({ params }: AuthenticationClientProps) {
     const { route } = use(params);
-    const signInRoute = path.SIGN_IN.replace("/", "");
-    const signUpRoute = path.SIGN_UP.replace("/", "");
-    const forgotPassRoute = path.FORGOT_PASSWORD.replace("/", "");
-    const resetPassRoute = path.RESET_PASSWORD.replace("/", "");
+    const signInRoute = PATH.SIGN_IN.replace("/", "");
+    const signUpRoute = PATH.SIGN_UP.replace("/", "");
+    const forgotPassRoute = PATH.FORGOT_PASSWORD.replace("/", "");
+    const resetPassRoute = PATH.RESET_PASSWORD.replace("/", "");
 
     const validRoutes = [signInRoute, signUpRoute, forgotPassRoute, resetPassRoute];
     if (!validRoutes.includes(route)) {

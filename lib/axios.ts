@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { path } from '@/config/path';
+import { PATH } from '@/config/path';
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
@@ -10,7 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -27,8 +27,8 @@ api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             if (typeof window !== 'undefined') {
-                localStorage.removeItem('token');
-                window.location.href = path.SIGN_IN;
+                localStorage.removeItem('accessToken');
+                window.location.href = PATH.SIGN_IN;
             }
         }
         return Promise.reject(error);

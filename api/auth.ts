@@ -2,11 +2,12 @@ import api from "@/lib/axios";
 
 const version = "v1";
 
-export const registerByEmail = async (email: string, password: string, name: string) => {
+export const registerByEmail = async (first_name: string, last_name: string, email: string, password: string) => {
     const response = await api.post(`/api/${version}/auth/register-by-email`, {
+        first_name,
+        last_name,
         email,
         password,
-        name,
     });
     return response.data;
 };

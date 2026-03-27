@@ -3,11 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Image from "next/image";
 import { useState } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { path } from "@/config/path";
+import { PATH } from "@/config/path";
+import LogoTheme from "../customs/LogoTheme";
 
 interface ResetPasswordError {
     password?: string;
@@ -58,9 +58,9 @@ export default function FormResetPassword() {
     }
 
     return (
-        <div className={`flex flex-col gap-4 min-w-sm`}>
+        <div className={`flex flex-col gap-4 min-w-xs md:min-w-sm`}>
             <div className={`flex flex-col gap-4 items-center text-center`}>
-                <Image src={`/images/logo.svg`} alt={"Logo"} width={240} height={64} style={{ width: '64px', height: 'auto' }} />
+                <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
                     Đặt lại mật khẩu để truy cập hệ thống VNSFintech
                 </p>
@@ -131,7 +131,7 @@ export default function FormResetPassword() {
             </div>
             <div className={`text-center text-sm `}>
                 Quay lại đăng nhập?{" "}
-                <Link href={path.SIGN_IN} className="underline underline-offset-4">
+                <Link href={PATH.SIGN_IN} className="underline underline-offset-4">
                     Đăng nhập
                 </Link>
             </div>
