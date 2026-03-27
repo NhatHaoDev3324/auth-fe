@@ -1,4 +1,4 @@
-# 🛡️ Advanced Authentication System (VNS Auth)
+# 🛡️ Advanced Authentication System (Authentication)
 
 Hệ thống xác thực toàn diện, bảo mật và hiện đại được xây dựng bằng **Next.js 15+**, **React 19** và **Tailwind CSS 4**. Dự án này cung cấp một quy trình xác thực người dùng hoàn chỉnh từ Đăng ký, OTP, Đăng nhập đến Quên mật khẩu với trải nghiệm người dùng cao cấp.
 
