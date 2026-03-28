@@ -18,11 +18,6 @@ Cung cấp trải nghiệm thị giác tuyệt vời với sự hỗ trợ của
 | :---: | :---: |
 | ![Login Light](public/readme/loginLight.png) | ![Login Dark](public/readme/loginDark.png) |
 
-### 📧 Email xác thực OTP chuyên nghiệp
-Hệ thống gửi email với mã OTP 6 chữ số được thiết kế hiện đại, đồng bộ hóa với Backend Golang.
-
-![Email OTP](public/readme/email.png)
-
 ---
 
 ## ✨ Tính năng nổi bật & Cập nhật mới nhất
@@ -40,6 +35,7 @@ Hệ thống gửi email với mã OTP 6 chữ số được thiết kế hiện
   - **Sonner Notifications**: Hệ thống thông báo toast hiện đại.
   - **Bảo mật**: Axios Interceptors tự động đính kèm token và xử lý đăng xuất khi token hết hạn.
 - 📦 **State Management**: Zustand quản lý tập trung `userID`, `userName`, `email`, và `avatar`.
+- 📧 **Email xác thực OTP chuyên nghiệp**: Hệ thống gửi email với mã OTP 6 chữ số được thiết kế hiện đại, đồng bộ hóa với Backend Golang.
 
 ---
 
