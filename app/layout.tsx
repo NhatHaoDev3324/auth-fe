@@ -25,8 +25,8 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-    title: "Auth",
-    description: "Auth",
+    title: "Auth - NhatHao",
+    description: "Hệ thống xác thực toàn diện, bảo mật và hiện đại được xây dựng bằng Next.js 15+, React 19 và Tailwind CSS 4. Dự án này cung cấp một quy trình xác thực người dùng hoàn chỉnh từ Đăng ký, OTP, Đăng nhập đến Quên mật khẩu với trải nghiệm người dùng cao cấp.",
     icons: {
         icon: [
             {
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 >
                     <MountProvider>
                         {children}
-                        <Toaster richColors />
+                        <Toaster />
                     </MountProvider>
                 </ThemeProvider>
             </body>

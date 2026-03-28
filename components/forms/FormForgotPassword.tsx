@@ -8,6 +8,10 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { PATH } from "@/config/path";
 import LogoTheme from "../customs/LogoTheme";
+import DialogVerifyOTP from "../customs/DialogVerifyOTP";
+import { forgotPassword } from "@/api/auth";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface ForgotPasswordError {
     email?: string;
@@ -17,8 +21,9 @@ export default function FormForgotPassword() {
     const [email, setEmail] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<ForgotPasswordError>({});
+    const [openDialogVerify, setOpenDialogVerify] = useState<boolean>(false);
 
-    function handleForgotPassword() {
+    const handleForgotPassword = async () => {
         const newErrors: ForgotPasswordError = {};
 
         if (!email) {
@@ -36,7 +41,16 @@ export default function FormForgotPassword() {
         setLoading(true)
 
         try {
-
+            const res = await forgotPassword(email);
+            if (res.success) {
+                setOpenDialogVerify(true)
+            }
+        } catch (error) {
+            let message = "Gửi yêu cầu thất bại. Vui lòng kiểm tra lại thông tin.";
+            if (axios.isAxiosError(error)) {
+                message = error.response?.data?.message || message;
+            }
+            toast.error(message);
         } finally {
             setLoading(false)
         }
@@ -47,7 +61,7 @@ export default function FormForgotPassword() {
             <div className={`flex flex-col gap-4 items-center text-center`}>
                 <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
-                    Nhập email VNSFintech của bạn để nhận liên kết đặt lại mật khẩu
+                    Nhập email NhatHao của bạn để nhận liên kết đặt lại mật khẩu
                 </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -82,6 +96,7 @@ export default function FormForgotPassword() {
                     Đăng nhập
                 </Link>
             </div>
+            <DialogVerifyOTP openDialog={openDialogVerify} setOpenDialog={setOpenDialogVerify} email={email} resendOtp={handleForgotPassword} type="forgot-password" />
         </div>
     )
 }

@@ -39,3 +39,29 @@ export const getProfile = async () => {
     const response = await api.get(`/api/${version}/auth/profile`);
     return response.data.data;
 };
+
+export const forgotPassword = async (email: string) => {
+    const response = await api.post(`/api/${version}/auth/forgot-password`, {
+        email,
+    });
+    return response.data;
+};
+
+export const verifyOtpForgotPassword = async (email: string, otp: string) => {
+    const response = await api.post(`/api/${version}/auth/verify-otp-forgot-password`, {
+        email,
+        otp,
+    });
+    return response.data;
+};
+
+export const resetPassword = async (new_password: string, token: string) => {
+    const response = await api.post(`/api/${version}/auth/reset-password`, {
+        new_password,
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+};

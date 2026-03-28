@@ -8,6 +8,10 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { PATH } from "@/config/path";
 import LogoTheme from "../customs/LogoTheme";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { resetPassword } from "@/api/auth";
+import axios from "axios";
 
 interface ResetPasswordError {
     password?: string;
@@ -15,6 +19,8 @@ interface ResetPasswordError {
 }
 
 export default function FormResetPassword() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [errors, setErrors] = useState<ResetPasswordError>({});
@@ -27,7 +33,14 @@ export default function FormResetPassword() {
     });
     const [loading, setLoading] = useState<boolean>(false);
 
-    async function handleResetPassword() {
+    const code = searchParams.get("code");
+
+    const handleResetPassword = async () => {
+        if (!code) {
+            toast.error("Mã xác thực không hợp lệ");
+            return;
+        }
+
         const newErrors: ResetPasswordError = {};
 
         if (!password) {
@@ -47,11 +60,22 @@ export default function FormResetPassword() {
             return;
         }
 
+
         setErrors({});
         setLoading(true)
 
         try {
-
+            const res = await resetPassword(password, code);
+            if (res.success) {
+                toast.success("Đặt lại mật khẩu thành công");
+                router.replace(PATH.SIGN_IN);
+            }
+        } catch (error) {
+            let message = "Đặt lại mật khẩu thất bại. Vui lòng kiểm tra lại thông tin.";
+            if (axios.isAxiosError(error)) {
+                message = error.response?.data?.message || message;
+            }
+            toast.error(message);
         } finally {
             setLoading(false)
         }
@@ -62,7 +86,7 @@ export default function FormResetPassword() {
             <div className={`flex flex-col gap-4 items-center text-center`}>
                 <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
-                    Đặt lại mật khẩu để truy cập hệ thống VNSFintech
+                    Đặt lại mật khẩu để truy cập hệ thống NhatHao
                 </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -122,14 +146,14 @@ export default function FormResetPassword() {
 
                     <div className={"h-4"}>{errors.confirmPassword && <small className="text-red-500">{errors.confirmPassword}</small>}</div>
                 </div>
-
-                <div className="flex flex-col gap-3 mt-2">
-                    <Button className="w-full" onClick={handleResetPassword} disabled={loading}>
-                        {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Đặt lại mật khẩu"}
-                    </Button>
-                </div>
+                <p className="text-xs text-muted-foreground italic text-center">
+                    * Đặt lại mật khẩu có hiệu lực trong 5 phút
+                </p>
+                <Button className="w-full mt-1" onClick={handleResetPassword} disabled={loading}>
+                    {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Đặt lại mật khẩu"}
+                </Button>
             </div>
-            <div className={`text-center text-sm `}>
+            <div className={`text-center text-sm`}>
                 Quay lại đăng nhập?{" "}
                 <Link href={PATH.SIGN_IN} className="underline underline-offset-4">
                     Đăng nhập

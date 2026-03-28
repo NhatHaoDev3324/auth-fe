@@ -12,7 +12,7 @@ interface LogoThemeProps {
     className?: string;
 }
 
-export default function LogoTheme({ width = 240, height = 64, className = "w-16 h-auto" }: LogoThemeProps) {
+export default function LogoTheme({ width = 240, height = 64, className = "w-16 h-16" }: LogoThemeProps) {
     const { theme } = useTheme();
     const Logo = theme === "light" ? LogoLight : LogoDark
     return (

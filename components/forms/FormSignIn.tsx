@@ -26,7 +26,6 @@ export default function FormSignIn() {
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
     const [errors, setErrors] = useState<SignInError>({});
-    const { theme } = useTheme();
     const router = useRouter();
     const searchParams = useSearchParams();
     const hasCalledApi = useRef(false);
@@ -53,7 +52,7 @@ export default function FormSignIn() {
                 localStorage.setItem('accessToken', token);
 
                 toast.success("Đăng nhập thành công!");
-                router.push('/');
+                router.replace(PATH.HOME);
             }
         } catch (error) {
             let message = "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.";
@@ -120,15 +119,12 @@ export default function FormSignIn() {
         handleCallback();
     }, [searchParams, router]);
 
-
-
-
     return (
         <div className={`flex flex-col gap-4 min-w-xs md:min-w-sm`}>
             <div className={`flex flex-col gap-4 items-center text-center`}>
                 <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
-                    Truy cập hệ thống VNSFintech để quản lý dữ liệu tài chính của bạn
+                    Truy cập hệ thống NhatHao để quản lý dữ liệu tài chính của bạn
                 </p>
             </div>
             <div className="flex flex-col gap-2">

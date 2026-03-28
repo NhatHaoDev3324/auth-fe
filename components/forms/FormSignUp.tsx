@@ -96,7 +96,7 @@ export default function FormSignUp() {
             <div className={`flex flex-col gap-4 items-center text-center`}>
                 <LogoTheme />
                 <p className="text-foreground text-sm max-w-xs">
-                    Truy cập hệ thống VNSFintech để quản lý dữ liệu tài chính của bạn
+                    Truy cập hệ thống NhatHao để quản lý dữ liệu tài chính của bạn
                 </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -229,7 +229,7 @@ export default function FormSignUp() {
                 </Link>
             </div>
 
-            <DialogVerifyOTP openDialog={openDialogVerify} setOpenDialog={setOpenDialogVerify} email={email} resendOtp={handleSignUp} />
+            <DialogVerifyOTP openDialog={openDialogVerify} setOpenDialog={setOpenDialogVerify} email={email} resendOtp={handleSignUp} type="register" />
 
         </div>
     )

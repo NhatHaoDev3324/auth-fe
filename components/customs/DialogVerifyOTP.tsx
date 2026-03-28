@@ -11,7 +11,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { verifyOtp } from "@/api/auth";
+import { verifyOtp, verifyOtpForgotPassword } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
@@ -27,9 +27,10 @@ interface DialogVerifyOTPProps {
     setOpenDialog: (open: boolean) => void;
     email: string;
     resendOtp: () => void;
+    type: "register" | "forgot-password";
 }
 
-export default function DialogVerifyOTP({ openDialog, setOpenDialog, email, resendOtp }: DialogVerifyOTPProps) {
+export default function DialogVerifyOTP({ openDialog, setOpenDialog, email, resendOtp, type }: DialogVerifyOTPProps) {
 
     const [loadingVerify, setLoadingVerify] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState(60);
@@ -37,16 +38,30 @@ export default function DialogVerifyOTP({ openDialog, setOpenDialog, email, rese
     const { theme } = useTheme();
     const router = useRouter();
 
-    async function handleVerify() {
+    const verifyOtpAction = async () => {
+        if (type === "register") {
+            return await verifyOtp(email, otp);
+        } else {
+            return await verifyOtpForgotPassword(email, otp);
+        }
+    }
+
+    const handleVerify = async () => {
         setLoadingVerify(true)
         try {
-            const res = await verifyOtp(email, otp);
+            const res = await verifyOtpAction();
             if (res.success) {
-                setOpenDialog(false)
-                router.push(PATH.SIGN_IN)
-                toast.success("Xác thực tài khoản thành công", {
-                    description: "Vui lòng đăng nhập để tiếp tục",
-                })
+                if (type === "register") {
+                    router.push(PATH.SIGN_IN)
+                    toast.success("Xác thực tài khoản thành công", {
+                        description: "Vui lòng đăng nhập để tiếp tục",
+                    })
+                } else {
+                    router.push(`${PATH.RESET_PASSWORD}?code=${res.token}`)
+                    toast.success("Xác thực tài khoản thành công", {
+                        description: "Vui lòng nhập mật khẩu mới",
+                    })
+                }
             }
         } catch (error) {
             let message = "Xác thực tài khoản thất bại. Vui lòng kiểm tra lại thông tin.";
